@@ -3,7 +3,6 @@ package com.springboot.CRUDOperation.services;
 import com.springboot.CRUDOperation.entities.Department;
 import com.springboot.CRUDOperation.error.DepartmentNotFoundException;
 import com.springboot.CRUDOperation.repository.DepartmentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,14 +11,18 @@ import java.util.Optional;
 
 @Service
 public class DepertmentServiceImpl implements DepartmentService {
-    @Autowired
-    private DepartmentRepository departmentRepository;
-//Adding department by Post method
+    private final DepartmentRepository departmentRepository;
+
+    public DepertmentServiceImpl(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
+
+    //Adding department by Post method
     @Override
     public Department saveDepartment(Department department) {
         return departmentRepository.save(department);
     }
-//Getting all department by Post method
+    //Getting all department by Post method
 
     @Override
     public List<Department> fetchDepartmentList() {
@@ -29,9 +32,9 @@ public class DepertmentServiceImpl implements DepartmentService {
 
     @Override
     public Department fetchDepartmentById(Long deptId) throws DepartmentNotFoundException {
-        Optional <Department> department =
+        Optional<Department> department =
                 departmentRepository.findById(deptId);
-        if(!department.isPresent()) {
+        if (!department.isPresent()) {
             throw new DepartmentNotFoundException("Department not available");
         }
         return department.get();
@@ -42,15 +45,18 @@ public class DepertmentServiceImpl implements DepartmentService {
 //Delete department by Delete method
 
     @Override
-    public void deleteDepartmentbyId(Long deptId) {
+    public void deleteDepartmentbyId(Long deptId) throws DepartmentNotFoundException {
+        Optional<Department> optionalDepartment = departmentRepository.findById(deptId);
+        if (optionalDepartment.isEmpty()) {
+            throw new DepartmentNotFoundException("Department not found");
+        }
         departmentRepository.deleteById(deptId);
-
     }
 //Update department by update method
 
     @Override
-    public Department updateDepartment(Long deptId, Department department) {
-        Department depDB = departmentRepository.findById(deptId).get();
+    public Department updateDepartment(Long id, Department department) {
+        Department depDB = departmentRepository.findById(id).get();
 
         if (Objects.nonNull(department.getDeptName())
                 && !"".equalsIgnoreCase(department.getDeptName())) {

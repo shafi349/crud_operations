@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/department")
 public class DepartmentController {
 
     //    Adding data by POST method
@@ -19,14 +20,16 @@ public class DepartmentController {
     private DepartmentService departmentService;
     private final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
 
-    @PostMapping("/departments")
+    // localhost:8080/department - POST
+    @PostMapping
     public Department saveDepartment(@Valid @RequestBody Department department) {
         LOGGER.info("Inside saveDepartment of DepartmentController");
         return departmentService.saveDepartment(department);
     }
     //    Getting all data by Get method
 
-    @GetMapping("/departments")
+    // localhost:8080/department - GET
+    @GetMapping
     public List<Department> fetchDepartmentList() {
         LOGGER.info("Inside fetchDepartmentList of DepartmentController");
 
@@ -35,31 +38,34 @@ public class DepartmentController {
 
     //    Getting single data by Get method
 
-    @GetMapping("/departments/{id}")
+    // localhost:8080/department/{id} - GET
+    @GetMapping("/{id}")
     public Department fetchDepartmentById(@PathVariable("id") Long deptId) throws DepartmentNotFoundException {
         return departmentService.fetchDepartmentById(deptId);
     }
 
     //    Get department by name
-    @GetMapping("/departments/name/{name}")
-    public Department fetchsDepartmentByName(@PathVariable("name") String deptName) {
-        return departmentService.fetchDepartmentByName(deptName);
+    // localhost:8080/department/name/{name} - GET
+    @GetMapping("/name/{name}")
+    public Department fetchsDepartmentByName(@PathVariable String name) {
+        return departmentService.fetchDepartmentByName(name);
 
     }
 
     //    Delete single data by Delete method
-
-    @DeleteMapping("/departments/{id}")
-    public String deleteDepartmentById(@PathVariable("id") Long deptId) {
+    // localhost:8080/department/{id} - DELETE
+    @DeleteMapping("/{id}")
+    public String deleteDepartmentById(@PathVariable("id") Long deptId) throws DepartmentNotFoundException {
         departmentService.deleteDepartmentbyId(deptId);
         return "Deleted Successfully";
     }
 
     //    Update single data by Put method
 
-    @PutMapping("/departments/{id}")
-    public Department updateDepartmentById(@PathVariable("id") Long deptId, @RequestBody Department department) {
-        return departmentService.updateDepartment(deptId, department);
+    // localhost:8080/department - PUT
+    @PutMapping("/{id}")
+    public Department updateDepartmentById(@PathVariable("id") Long meriId, @RequestBody Department department) {
+        return departmentService.updateDepartment(meriId, department);
     }
 
 
