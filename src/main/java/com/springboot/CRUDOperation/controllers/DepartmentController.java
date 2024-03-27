@@ -64,7 +64,7 @@ public class DepartmentController {
 
     // localhost:8080/department - PUT
     @PutMapping("/{id}")
-    public Department updateDepartmentById(@PathVariable("id") Long meriId, @RequestBody Department department) {
+    public Department updateDepartmentById(@PathVariable("id") Long meriId, @RequestBody Department department) throws Exception {
         return departmentService.updateDepartment(meriId, department);
     }
 
